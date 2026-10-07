@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">FitClub authentication STRIDE threat model</title>
+  <desc id="desc">Administrator browser communicates with Auth API, user database, and session audit store across a trust boundary.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0,0 L10,3.5 L0,7 z" fill="#345b7e"/></marker></defs>
+  <rect width="1200" height="620" fill="#ffffff"/>
+  <text x="60" y="55" font-family="Arial" font-size="28" font-weight="700" fill="#17324d">FitClub — аутентификацияның STRIDE моделі</text>
+  <rect x="40" y="95" width="300" height="450" rx="12" fill="#f5f7fa" stroke="#9aa9b5" stroke-width="2" stroke-dasharray="10 8"/>
+  <text x="65" y="130" font-family="Arial" font-size="18" font-weight="700" fill="#4d5d6c">Сенімсіз аймақ / Internet</text>
+  <rect x="370" y="95" width="790" height="450" rx="12" fill="#f7fbff" stroke="#39739d" stroke-width="3"/>
+  <text x="395" y="130" font-family="Arial" font-size="18" font-weight="700" fill="#24577a">FitClub қолданба аймағы</text>
+  <rect x="85" y="245" width="210" height="105" rx="12" fill="#fff3d8" stroke="#c58a19" stroke-width="2"/>
+  <text x="190" y="285" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700" fill="#5d430f">Әкімші / менеджер</text>
+  <text x="190" y="315" text-anchor="middle" font-family="Arial" font-size="16" fill="#5d430f">браузері</text>
+  <rect x="500" y="230" width="230" height="130" rx="18" fill="#d9ecf7" stroke="#27678f" stroke-width="3"/>
+  <text x="615" y="282" text-anchor="middle" font-family="Arial" font-size="21" font-weight="700" fill="#17324d">Auth және API</text>
+  <text x="615" y="315" text-anchor="middle" font-family="Arial" font-size="15" fill="#17324d">RBAC · rate-limit · session</text>
+  <path d="M840 180 h220 v105 h-220 q-18 0-18-18 v-69 q0-18 18-18z" fill="#e8f3e8" stroke="#42864b" stroke-width="2"/>
+  <path d="M840 180 q110 28 220 0" fill="none" stroke="#42864b" stroke-width="2"/>
+  <text x="950" y="225" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700" fill="#285d30">Пайдаланушы / рөл DB</text>
+  <text x="950" y="253" text-anchor="middle" font-family="Arial" font-size="15" fill="#285d30">hash · role</text>
+  <path d="M840 380 h220 v105 h-220 q-18 0-18-18 v-69 q0-18 18-18z" fill="#ece8f6" stroke="#68518f" stroke-width="2"/>
+  <path d="M840 380 q110 28 220 0" fill="none" stroke="#68518f" stroke-width="2"/>
+  <text x="950" y="425" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700" fill="#473663">Сессия / audit log</text>
+  <text x="950" y="453" text-anchor="middle" font-family="Arial" font-size="15" fill="#473663">actor · time · request ID</text>
+  <line x1="295" y1="275" x2="495" y2="275" stroke="#345b7e" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="495" y1="325" x2="300" y2="325" stroke="#345b7e" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="397" y="258" text-anchor="middle" font-family="Arial" font-size="14" fill="#345b7e">TLS: логин / пароль</text>
+  <text x="397" y="350" text-anchor="middle" font-family="Arial" font-size="14" fill="#345b7e">Secure cookie / жауап</text>
+  <line x1="730" y1="260" x2="817" y2="235" stroke="#345b7e" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="817" y1="265" x2="735" y2="300" stroke="#345b7e" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="730" y1="330" x2="817" y2="410" stroke="#345b7e" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="817" y1="455" x2="728" y2="350" stroke="#345b7e" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="610" y="580" text-anchor="middle" font-family="Arial" font-size="16" fill="#4d5d6c">STRIDE: spoofing · tampering · repudiation · disclosure · denial of service · elevation of privilege</text>
+</svg>

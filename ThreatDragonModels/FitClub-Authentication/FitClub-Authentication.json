@@ -1,0 +1,159 @@
+{
+  "summary": {
+    "title": "FitClub Authentication",
+    "owner": "FitClub командасы",
+    "description": "FitClub әкімшісі мен менеджерінің аутентификациясы, рөлдік қолжетімділігі, сессиясы және аудит журналы үшін STRIDE моделі.",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [
+      { "name": "Ануар" },
+      { "name": "Айдос" },
+      { "name": "Әділбек" }
+    ],
+    "reviewer": "Оқытушы",
+    "diagrams": [
+      {
+        "title": "FitClub Authentication Data Flow",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
+        "diagramType": "STRIDE",
+        "id": 0,
+        "size": { "height": 650, "width": 1100 },
+        "diagramJson": {
+          "cells": [
+            {
+              "type": "tm.Actor",
+              "size": { "width": 160, "height": 80 },
+              "position": { "x": 50, "y": 260 },
+              "angle": 0,
+              "id": "9bb1633c-9b2f-4ef5-a15a-4818ff0f4c01",
+              "z": 1,
+              "threats": [],
+              "outOfScope": false,
+              "hasOpenThreats": false,
+              "attrs": {
+                ".element-shape": { "class": "element-shape hasNoOpenThreats isInScope" },
+                "text": { "text": "Әкімші / менеджер\nбраузері" },
+                ".element-text": { "class": "element-text hasNoOpenThreats isInScope" }
+              }
+            },
+            {
+              "type": "tm.Process",
+              "size": { "width": 150, "height": 110 },
+              "position": { "x": 400, "y": 245 },
+              "angle": 0,
+              "id": "3aa6f888-9069-40f5-ae26-b8438265b2d7",
+              "z": 2,
+              "privilegeLevel": "executionContext =Limited",
+              "outOfScope": false,
+              "hasOpenThreats": true,
+              "threats": [
+                { "status": "Open", "severity": "High", "title": "Brute-force немесе ұрланған credential", "type": "Spoofing", "description": "Шабуылдаушы басқа пайдаланушы ретінде кіруге тырысады.", "mitigation": "Adaptive password hash, 5 сәтсіз кіруден кейін rate-limit және уақытша lockout енгізу." },
+                { "status": "Open", "severity": "High", "title": "Role/session tampering", "type": "Tampering", "description": "Клиент жіберген role немесе session мәнін өзгертіп, қосымша құқық алуға әрекет жасалады.", "mitigation": "Opaque немесе қолтаңбаланған сессия және әр endpoint-та серверлік RBAC қолдану." },
+                { "status": "Open", "severity": "High", "title": "Артық құқық алу", "type": "Elevation of privilege", "description": "Менеджер әкімші endpoint-ын тікелей шақырады.", "mitigation": "Deny-by-default permission matrix және рұқсатсыз API сұрауларына арналған теріс тесттер." },
+                { "status": "Open", "severity": "Medium", "title": "Login endpoint-ке жүктеме", "type": "Denial of service", "description": "Көп сұрау аутентификация қызметін қолжетімсіз етеді.", "mitigation": "IP/account rate-limit, timeout, health-check және alert." }
+              ],
+              "attrs": {
+                ".element-shape": { "class": "element-shape hasOpenThreats isInScope" },
+                "text": { "text": "FitClub\nAuth және API" },
+                ".element-text": { "class": "element-text hasOpenThreats isInScope" }
+              }
+            },
+            {
+              "type": "tm.Store",
+              "size": { "width": 180, "height": 90 },
+              "position": { "x": 790, "y": 150 },
+              "angle": 0,
+              "id": "f341f10d-b032-47a3-a3a6-83eaaf062f12",
+              "z": 3,
+              "storesCredentials": true,
+              "outOfScope": false,
+              "hasOpenThreats": true,
+              "threats": [
+                { "status": "Open", "severity": "High", "title": "Жеке деректің ашылуы", "type": "Information disclosure", "description": "Пайдаланушы, телефон және рөл дерегі рұқсатсыз сұрау не backup арқылы ашылады.", "mitigation": "Least privilege, TLS, backup шифрлау, өрістерді азайту және access review." }
+              ],
+              "attrs": {
+                ".element-shape": { "class": "element-shape hasOpenThreats isInScope" },
+                "text": { "text": "Пайдаланушы және рөл DB" },
+                ".element-text": { "class": "element-text hasOpenThreats isInScope" }
+              }
+            },
+            {
+              "type": "tm.Store",
+              "size": { "width": 180, "height": 90 },
+              "position": { "x": 790, "y": 390 },
+              "angle": 0,
+              "id": "cf95ea27-7098-4abc-a1e4-39a65b0dc616",
+              "z": 4,
+              "isALog": true,
+              "outOfScope": false,
+              "hasOpenThreats": true,
+              "threats": [
+                { "status": "Open", "severity": "Medium", "title": "Әрекетті жоққа шығару", "type": "Repudiation", "description": "Әкімші клиент жазбасын өзгертіп, кейін әрекетін жоққа шығарады.", "mitigation": "Actor, action, target, time және request ID бар append-only audit log." }
+              ],
+              "attrs": {
+                ".element-shape": { "class": "element-shape hasOpenThreats isInScope" },
+                "text": { "text": "Сессия және audit log" },
+                ".element-text": { "class": "element-text hasOpenThreats isInScope" }
+              }
+            },
+            {
+              "type": "tm.Boundary",
+              "size": { "width": 10, "height": 10 },
+              "smooth": true,
+              "source": { "x": 300, "y": 80 },
+              "target": { "x": 300, "y": 560 },
+              "id": "47410db1-36fe-4b8e-8708-86096f282ca8",
+              "z": 5,
+              "attrs": {}
+            },
+            {
+              "type": "tm.Flow",
+              "size": { "width": 10, "height": 10 },
+              "smooth": true,
+              "source": { "id": "9bb1633c-9b2f-4ef5-a15a-4818ff0f4c01" },
+              "target": { "id": "3aa6f888-9069-40f5-ae26-b8438265b2d7" },
+              "id": "1092033c-050f-4749-bb26-2ea8eac46c47",
+              "z": 6,
+              "labels": [{ "position": 0.5, "attrs": { "text": { "text": "TLS: логин / пароль", "font-weight": "400", "font-size": "small" } } }],
+              "isPublicNetwork": true,
+              "isEncrypted": true,
+              "protocol": "HTTP/S",
+              "outOfScope": false,
+              "hasOpenThreats": false,
+              "attrs": { ".marker-target": { "class": "marker-target hasNoOpenThreats isInScope" }, ".connection": { "class": "connection hasNoOpenThreats isInScope" } }
+            },
+            {
+              "type": "tm.Flow",
+              "size": { "width": 10, "height": 10 },
+              "smooth": true,
+              "source": { "id": "3aa6f888-9069-40f5-ae26-b8438265b2d7" },
+              "target": { "id": "f341f10d-b032-47a3-a3a6-83eaaf062f12" },
+              "id": "58d3ed43-5df1-42fc-918a-4f3cdb6afaf3",
+              "z": 7,
+              "labels": [{ "position": 0.5, "attrs": { "text": { "text": "user / role query", "font-weight": "400", "font-size": "small" } } }],
+              "isEncrypted": true,
+              "outOfScope": false,
+              "hasOpenThreats": false,
+              "attrs": { ".marker-target": { "class": "marker-target hasNoOpenThreats isInScope" }, ".connection": { "class": "connection hasNoOpenThreats isInScope" } }
+            },
+            {
+              "type": "tm.Flow",
+              "size": { "width": 10, "height": 10 },
+              "smooth": true,
+              "source": { "id": "3aa6f888-9069-40f5-ae26-b8438265b2d7" },
+              "target": { "id": "cf95ea27-7098-4abc-a1e4-39a65b0dc616" },
+              "id": "9345bf10-92ca-471e-bf31-887d95081214",
+              "z": 8,
+              "labels": [{ "position": 0.5, "attrs": { "text": { "text": "login / admin event", "font-weight": "400", "font-size": "small" } } }],
+              "isEncrypted": true,
+              "outOfScope": false,
+              "hasOpenThreats": false,
+              "attrs": { ".marker-target": { "class": "marker-target hasNoOpenThreats isInScope" }, ".connection": { "class": "connection hasNoOpenThreats isInScope" } }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+flowchart LR
+  U[Әкімші / менеджер браузері]
+  subgraph Internet[Сенімсіз аймақ]
+    U
+  end
+  subgraph App[FitClub қолданба аймағы]
+    A[Auth және API]
+    D[(Пайдаланушы және рөл DB)]
+    S[(Сессия / audit log)]
+  end
+  U -->|TLS: логин, пароль| A
+  A -->|Secure cookie / жауап| U
+  A -->|Пайдаланушы, рөл сұрауы| D
+  D -->|Hash, role| A
+  A -->|Кіру және өзгеріс оқиғасы| S
+  S -->|Сессияны тексеру| A

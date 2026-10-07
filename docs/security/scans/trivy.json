@@ -1,0 +1,19 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.75.0"
+  },
+  "ReportID": "01a116c3-69f2-755b-beca-68ad02a7c777",
+  "CreatedAt": "2026-10-07T19:27:47.8263512+05:00",
+  "ArtifactID": "sha256:7d260dcb2a1120bc784c428ff7e9c7a8f58449aa5c850f48c2bd2309773db452",
+  "ArtifactName": "work/fitclub-scan",
+  "ArtifactType": "repository",
+  "Metadata": {
+    "RepoURL": "https://github.com/Scr1ptK1ng/fitclub-project.git",
+    "Branch": "main",
+    "Commit": "27ea53fc22549cb5c7dba69f32a80b1c15b4d7ab",
+    "CommitMsg": "docs: add FitClub lab 6 probabilistic estimate",
+    "Author": "Aidos Amanzhol \u003c132749185+Scr1ptK1ng@users.noreply.github.com\u003e",
+    "Committer": "Aidos Amanzhol \u003c132749185+Scr1ptK1ng@users.noreply.github.com\u003e"
+  }
+}
