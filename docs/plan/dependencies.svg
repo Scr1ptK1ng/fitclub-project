@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#31546d"/></marker>
+    <style>
+      text{font-family:'Segoe UI',Arial,sans-serif;fill:#17324d}.title{font-size:34px;font-weight:700}.sub{font-size:18px}.h{font-size:19px;font-weight:650}.b{font-size:16px}.ext{fill:#fff0d2;stroke:#bd7a18;stroke-width:2}.int{fill:#e5f3ed;stroke:#4a8972;stroke-width:2}.end{fill:#e5eef8;stroke:#547da6;stroke-width:2}.line{stroke:#31546d;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.dash{stroke-dasharray:9 7}.tag{font-size:14px;fill:#6b4a15}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#fff"/>
+  <text x="55" y="62" class="title">FitClub ЛЗ5 тәуелділіктер картасы</text>
+  <text x="55" y="94" class="sub">Сары — сыртқы шешім немесе жеткізуші  Жасыл — ішкі нәтиже  Көк — қабылдау</text>
+
+  <rect x="55" y="145" rx="12" width="260" height="92" class="ext"/><text x="75" y="177" class="h">EXT-01 Оқытушы</text><text x="75" y="204" class="b">baseline шешімі</text><text x="75" y="225" class="tag">Иесі Ануар  08.10</text>
+  <rect x="55" y="302" rx="12" width="260" height="92" class="ext"/><text x="75" y="334" class="h">EXT-02 Клуб өкілі</text><text x="75" y="361" class="b">бизнес ережелері</text><text x="75" y="382" class="tag">Иесі Ануар  15.10</text>
+  <rect x="55" y="459" rx="12" width="260" height="92" class="ext"/><text x="75" y="491" class="h">EXT-03 Хостинг</text><text x="75" y="518" class="b">орта және сақтау орны</text><text x="75" y="539" class="tag">Иесі Айдос  22.10</text>
+  <rect x="55" y="616" rx="12" width="260" height="92" class="ext"/><text x="75" y="648" class="h">EXT-05 Демо</text><text x="75" y="675" class="b">қабылдау уақыты</text><text x="75" y="696" class="tag">Иесі Ануар  02.12</text>
+
+  <rect x="390" y="145" rx="12" width="245" height="92" class="int"/><text x="410" y="180" class="h">Жоспарлау baseline</text><text x="410" y="207" class="b">WBS және релиздер</text>
+  <rect x="390" y="302" rx="12" width="245" height="92" class="int"/><text x="410" y="337" class="h">Клиент карточкасы</text><text x="410" y="364" class="b">кіру және іздеу</text>
+  <rect x="700" y="302" rx="12" width="245" height="92" class="int"/><text x="720" y="337" class="h">Абонемент төлем</text><text x="720" y="364" class="b">күйі және мерзімі</text>
+  <rect x="1010" y="230" rx="12" width="245" height="92" class="int"/><text x="1030" y="265" class="h">Кесте және бронь</text><text x="1030" y="292" class="b">топтық жол</text>
+  <rect x="1010" y="390" rx="12" width="245" height="92" class="int"/><text x="1030" y="425" class="h">Еркін келу</text><text x="1030" y="452" class="b">броньсыз жол</text>
+  <rect x="1320" y="302" rx="12" width="225" height="92" class="int"/><text x="1340" y="337" class="h">Есеп және аудит</text><text x="1340" y="364" class="b">екі қатысу түрі</text>
+
+  <rect x="390" y="500" rx="12" width="245" height="92" class="int"/><text x="410" y="535" class="h">Тест ортасы</text><text x="410" y="562" class="b">синтетикалық дерек</text>
+  <rect x="805" y="555" rx="12" width="275" height="92" class="end"/><text x="825" y="590" class="h">Қабылдау және NFR</text><text x="825" y="617" class="b">дәлелдер мен хаттама</text>
+  <rect x="1255" y="616" rx="12" width="290" height="92" class="end"/><text x="1275" y="651" class="h">Қорытынды қабылдау</text><text x="1275" y="678" class="b">демонстрация және шешім</text>
+
+  <path d="M315 191 L390 191" class="line"/><path d="M510 237 L510 302" class="line"/>
+  <path d="M315 348 L390 348" class="line"/><path d="M635 348 L700 348" class="line"/>
+  <path d="M945 340 C975 340 980 276 1010 276" class="line"/><path d="M945 356 C975 356 980 436 1010 436" class="line"/>
+  <path d="M1255 276 C1285 276 1280 332 1320 332" class="line"/><path d="M1255 436 C1285 436 1280 364 1320 364" class="line"/>
+  <path d="M315 505 L390 546" class="line"/><path d="M635 546 L805 585" class="line"/><path d="M1432 394 L1432 555 L1080 601" class="line"/>
+  <path d="M1080 601 L1255 662" class="line"/><path d="M315 662 L1255 662" class="line"/>
+
+  <rect x="55" y="770" rx="10" width="395" height="76" class="ext"/><text x="75" y="800" class="h">EXT-04 Хабарлама провайдері</text><text x="75" y="826" class="b">US-16 кейінгі релизге қалдырылған</text>
+  <path d="M450 808 L690 808" class="line dash"/><text x="715" y="814" class="sub">Негізгі үш инкрементке кірмейді</text>
+</svg>
