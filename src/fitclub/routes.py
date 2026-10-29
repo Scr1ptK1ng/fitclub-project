@@ -114,3 +114,39 @@ def new_membership(client_id: int):
         flash("Абонемент ашылды.", "success")
         return redirect(url_for("web.clients", q=client.contact))
     return render_template("membership-form.html", client=client, values=values)
+
+
+@web.route("/memberships/<int:membership_id>/extend", methods=["GET", "POST"])
+@admin_required
+def extend_membership(membership_id: int):
+    previous = db.get_or_404(Membership, membership_id)
+    values = {
+        "starts_on": request.form.get("starts_on", ""),
+        "ends_on": request.form.get("ends_on", ""),
+        "request_id": request.form.get("request_id", "").strip(),
+    }
+    if request.method == "POST":
+        existing = Membership.query.filter_by(request_id=values["request_id"]).first() if values["request_id"] else None
+        if existing:
+            flash("Бұл сұрау бұрын өңделген; екінші кезең жасалмады.", "success")
+            return redirect(url_for("web.clients", q=previous.client.contact))
+        try:
+            starts_on = date.fromisoformat(values["starts_on"])
+            ends_on = date.fromisoformat(values["ends_on"])
+            if not values["request_id"] or ends_on < starts_on or starts_on <= previous.ends_on:
+                raise ValueError("invalid-extension")
+        except (TypeError, ValueError):
+            flash("Request ID және алдыңғы кезеңнен кейінгі дұрыс күндер қажет.", "error")
+            return render_template("membership-extend.html", previous=previous, values=values), 400
+        db.session.add(Membership(
+            client=previous.client,
+            starts_on=starts_on,
+            ends_on=ends_on,
+            unlimited=previous.unlimited,
+            remaining_visits=previous.remaining_visits,
+            request_id=values["request_id"],
+        ))
+        db.session.commit()
+        flash("Абонемент ұзартылды; бұрынғы кезең тарихта сақталды.", "success")
+        return redirect(url_for("web.clients", q=previous.client.contact))
+    return render_template("membership-extend.html", previous=previous, values=values)

@@ -34,6 +34,7 @@ class Membership(db.Model):
     ends_on = db.Column(db.Date, nullable=False)
     unlimited = db.Column(db.Boolean, nullable=False, default=False)
     remaining_visits = db.Column(db.Integer)
+    request_id = db.Column(db.String(80), unique=True, index=True)
     client = db.relationship("Client", back_populates="memberships")
 
     __table_args__ = (

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Абонементті ұзарту · FitClub{% endblock %}
+{% block content %}
+<h1>{{ previous.client.full_name }} — абонементті ұзарту</h1>
+<p>Алдыңғы кезең: {{ previous.starts_on }}–{{ previous.ends_on }}. Ол тарихта сақталады.</p>
+<form method="post" class="card">
+  <label>Жаңа басталу күні<input name="starts_on" type="date" value="{{ values.starts_on }}" required></label>
+  <label>Жаңа аяқталу күні<input name="ends_on" type="date" value="{{ values.ends_on }}" required></label>
+  <label>Request ID<input name="request_id" value="{{ values.request_id }}" required></label>
+  <button type="submit">Ұзарту</button>
+</form>
+{% endblock %}

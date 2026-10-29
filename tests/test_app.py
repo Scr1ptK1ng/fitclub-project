@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 
 from werkzeug.security import generate_password_hash
@@ -84,6 +85,22 @@ class FitClubTestCase(unittest.TestCase):
         with self.app.app_context():
             self.assertEqual(Membership.query.count(), 2)
             self.assertIsNone(Membership.query.order_by(Membership.id.desc()).first().remaining_visits)
+
+    def test_extend_membership_is_idempotent_and_preserves_history(self):
+        self.login()
+        with self.app.app_context():
+            person = Client(full_name="Аян Серік", contact="+77010000000")
+            initial = Membership(client=person, starts_on=date(2026, 11, 1), ends_on=date(2026, 12, 1), unlimited=True)
+            db.session.add_all([person, initial])
+            db.session.commit()
+            membership_id = initial.id
+        payload = {"starts_on": "2026-12-02", "ends_on": "2027-01-02", "request_id": "extend-001"}
+        first = self.client.post(f"/memberships/{membership_id}/extend", data=payload, follow_redirects=True)
+        self.assertIn("Абонемент ұзартылды".encode(), first.data)
+        second = self.client.post(f"/memberships/{membership_id}/extend", data=payload, follow_redirects=True)
+        self.assertIn("екінші кезең жасалмады".encode(), second.data)
+        with self.app.app_context():
+            self.assertEqual(Membership.query.count(), 2)
 
 
 if __name__ == "__main__":
