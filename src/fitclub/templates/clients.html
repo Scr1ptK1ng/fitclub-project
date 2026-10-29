@@ -9,6 +9,7 @@
   <h2>{{ client.full_name }}</h2><p>{{ client.contact }}</p>
   {% set membership = client.memberships|sort(attribute='ends_on', reverse=true)|first %}
   {% if membership %}<p>Абонемент: <strong>{{ membership.status }}</strong>, {{ membership.ends_on }} · {% if membership.unlimited %}лимитсіз{% else %}{{ membership.remaining_visits }} келу қалды{% endif %}</p>{% else %}<p>Абонемент ашылмаған.</p>{% endif %}
+  <a href="{{ url_for('web.new_membership', client_id=client.id) }}">Абонемент ашу</a>
 </article>
 {% endfor %}
 {% endblock %}

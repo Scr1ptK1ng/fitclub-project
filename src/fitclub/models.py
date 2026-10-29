@@ -30,12 +30,14 @@ class Client(db.Model):
 class Membership(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey("client.id"), nullable=False, index=True)
+    starts_on = db.Column(db.Date, nullable=False)
     ends_on = db.Column(db.Date, nullable=False)
     unlimited = db.Column(db.Boolean, nullable=False, default=False)
     remaining_visits = db.Column(db.Integer)
     client = db.relationship("Client", back_populates="memberships")
 
     __table_args__ = (
+        CheckConstraint("ends_on >= starts_on", name="ck_membership_date_order"),
         CheckConstraint("remaining_visits IS NULL OR remaining_visits >= 0", name="ck_membership_visits_nonnegative"),
     )
 

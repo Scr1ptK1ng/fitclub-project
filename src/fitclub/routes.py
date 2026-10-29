@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from functools import wraps
+from datetime import date
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 
-from .models import Client, User, db
+from .models import Client, Membership, User, db
 
 
 web = Blueprint("web", __name__)
@@ -83,3 +84,33 @@ def new_client():
         flash("Клиент тіркелді.", "success")
         return redirect(url_for("web.clients", q=values["contact"]))
     return render_template("client-form.html", values=values)
+
+
+@web.route("/clients/<int:client_id>/memberships/new", methods=["GET", "POST"])
+@admin_required
+def new_membership(client_id: int):
+    client = db.get_or_404(Client, client_id)
+    values = {
+        "starts_on": request.form.get("starts_on", ""),
+        "ends_on": request.form.get("ends_on", ""),
+        "kind": request.form.get("kind", "limited"),
+        "remaining_visits": request.form.get("remaining_visits", ""),
+    }
+    if request.method == "POST":
+        try:
+            starts_on = date.fromisoformat(values["starts_on"])
+            ends_on = date.fromisoformat(values["ends_on"])
+            unlimited = values["kind"] == "unlimited"
+            remaining = None if unlimited else int(values["remaining_visits"])
+            if ends_on < starts_on:
+                raise ValueError("date-order")
+            if not unlimited and remaining <= 0:
+                raise ValueError("visit-count")
+        except (TypeError, ValueError):
+            flash("Күндерді және лимитті абонемент үшін оң келу санын тексеріңіз.", "error")
+            return render_template("membership-form.html", client=client, values=values), 400
+        db.session.add(Membership(client=client, starts_on=starts_on, ends_on=ends_on, unlimited=unlimited, remaining_visits=remaining))
+        db.session.commit()
+        flash("Абонемент ашылды.", "success")
+        return redirect(url_for("web.clients", q=client.contact))
+    return render_template("membership-form.html", client=client, values=values)

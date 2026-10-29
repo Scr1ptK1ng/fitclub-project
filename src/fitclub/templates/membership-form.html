@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Абонемент ашу · FitClub{% endblock %}
+{% block content %}
+<h1>{{ client.full_name }} — абонемент ашу</h1>
+<form method="post" class="card">
+  <label>Басталу күні<input name="starts_on" type="date" value="{{ values.starts_on }}" required></label>
+  <label>Аяқталу күні<input name="ends_on" type="date" value="{{ values.ends_on }}" required></label>
+  <label>Түрі<select name="kind"><option value="limited" {% if values.kind == 'limited' %}selected{% endif %}>Лимитті</option><option value="unlimited" {% if values.kind == 'unlimited' %}selected{% endif %}>Лимитсіз</option></select></label>
+  <label>Келу саны<input name="remaining_visits" type="number" min="1" value="{{ values.remaining_visits }}"></label>
+  <button type="submit">Сақтау</button>
+</form>
+{% endblock %}

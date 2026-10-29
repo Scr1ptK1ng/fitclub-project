@@ -7,7 +7,7 @@ from pathlib import Path
 from werkzeug.security import generate_password_hash
 
 from fitclub import create_app
-from fitclub.models import Client, User, db
+from fitclub.models import Client, Membership, User, db
 
 
 class FitClubTestCase(unittest.TestCase):
@@ -63,6 +63,27 @@ class FitClubTestCase(unittest.TestCase):
         self.assertIn("Сәйкес клиент табылмады".encode(), empty.data)
         with self.app.app_context():
             self.assertEqual(Client.query.count(), 1)
+
+    def test_open_limited_and_unlimited_membership(self):
+        self.login()
+        self.client.post("/clients/new", data={"full_name": "Аян Серік", "contact": "+77010000000"})
+        with self.app.app_context():
+            client_id = Client.query.one().id
+        invalid = self.client.post(f"/clients/{client_id}/memberships/new", data={
+            "starts_on": "2026-11-01", "ends_on": "2026-10-31", "kind": "limited", "remaining_visits": "0"
+        })
+        self.assertEqual(invalid.status_code, 400)
+        limited = self.client.post(f"/clients/{client_id}/memberships/new", data={
+            "starts_on": "2026-11-01", "ends_on": "2026-12-01", "kind": "limited", "remaining_visits": "8"
+        }, follow_redirects=True)
+        self.assertIn("8 келу қалды".encode(), limited.data)
+        unlimited = self.client.post(f"/clients/{client_id}/memberships/new", data={
+            "starts_on": "2026-12-02", "ends_on": "2027-01-02", "kind": "unlimited", "remaining_visits": ""
+        }, follow_redirects=True)
+        self.assertIn("лимитсіз".encode(), unlimited.data)
+        with self.app.app_context():
+            self.assertEqual(Membership.query.count(), 2)
+            self.assertIsNone(Membership.query.order_by(Membership.id.desc()).first().remaining_visits)
 
 
 if __name__ == "__main__":

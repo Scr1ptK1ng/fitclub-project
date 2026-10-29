@@ -9,6 +9,8 @@
 - [sprint-1-plan.md](sprint-1-plan.md) — бірінші спринттің мақсаты және таңдалған жұмыс;
 - [sprint-1-decisions.md](sprint-1-decisions.md) — талаптарды нақтылау шешімдері;
 - [sprint-1-test-protocol.md](sprint-1-test-protocol.md) — нақты орындалған қабылдау тесттері;
+- [sprint-1-review-retro.md](sprint-1-review-retro.md) — Sprint 1 review, метрика және бір ретро әрекеті;
+- [sprint-2-plan.md](sprint-2-plan.md) — Sprint 2 мақсаты, scope және WIP=1 эксперименті;
 - [retrospective-template.md](retrospective-template.md) — Sprint 1 шолуы мен ретроспективасы;
 - [metrics-method.md](metrics-method.md) — GitHub оқиғаларынан throughput, cycle time, p85 және CFD есептеу тәртібі;
 - `scripts/export_flow_metrics.py` — GitHub API-ден нақты issue/event деректерін CSV-ге шығару құралы.
