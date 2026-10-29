@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Кіру · FitClub{% endblock %}
+{% block content %}
+<h1>Жүйеге кіру</h1>
+<form method="post" class="card">
+  <label>Логин<input name="login" autocomplete="username" required></label>
+  <label>Құпиясөз<input name="password" type="password" autocomplete="current-password" required></label>
+  <button type="submit">Кіру</button>
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Клиенттер · FitClub{% endblock %}
+{% block content %}
+<div class="heading"><h1>Клиенттер</h1><a class="button" href="{{ url_for('web.new_client') }}">Клиент қосу</a></div>
+<form method="get" class="search"><input name="q" value="{{ query }}" placeholder="Аты немесе байланысы"><button>Іздеу</button></form>
+{% if query and not clients %}<p>Сәйкес клиент табылмады.</p>{% endif %}
+{% for client in clients %}
+<article class="card">
+  <h2>{{ client.full_name }}</h2><p>{{ client.contact }}</p>
+  {% set membership = client.memberships|sort(attribute='ends_on', reverse=true)|first %}
+  {% if membership %}<p>Абонемент: <strong>{{ membership.status }}</strong>, {{ membership.ends_on }} · {% if membership.unlimited %}лимитсіз{% else %}{{ membership.remaining_visits }} келу қалды{% endif %}</p>{% else %}<p>Абонемент ашылмаған.</p>{% endif %}
+</article>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Клиент қосу · FitClub{% endblock %}
+{% block content %}
+<h1>Клиентті тіркеу</h1>
+<form method="post" class="card">
+  <label>Аты-жөні<input name="full_name" value="{{ values.full_name }}" required></label>
+  <label>Байланыс<input name="contact" value="{{ values.contact }}" required></label>
+  <button type="submit">Сақтау</button>
+</form>
+{% endblock %}
