@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from functools import wraps
 from datetime import date
+from decimal import Decimal, InvalidOperation
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash
 
-from .models import Client, Membership, User, db
+from .models import Client, Membership, Payment, User, db
 
 
 web = Blueprint("web", __name__)
@@ -150,3 +151,40 @@ def extend_membership(membership_id: int):
         flash("Абонемент ұзартылды; бұрынғы кезең тарихта сақталды.", "success")
         return redirect(url_for("web.clients", q=previous.client.contact))
     return render_template("membership-extend.html", previous=previous, values=values)
+
+
+@web.route("/memberships/<int:membership_id>/payments/new", methods=["GET", "POST"])
+@admin_required
+def new_payment(membership_id: int):
+    membership = db.get_or_404(Membership, membership_id)
+    values = {
+        "amount": request.form.get("amount", ""),
+        "status": request.form.get("status", "paid"),
+        "external_reference": request.form.get("external_reference", "").strip(),
+        "request_id": request.form.get("request_id", "").strip(),
+    }
+    if request.method == "POST":
+        existing = Payment.query.filter_by(request_id=values["request_id"]).first() if values["request_id"] else None
+        if existing:
+            flash("Бұл төлем сұрауы бұрын өңделген; қайталама төлем жасалмады.", "success")
+            return redirect(url_for("web.clients", q=membership.client.contact))
+        try:
+            amount = Decimal(values["amount"])
+            if amount <= 0 or not values["external_reference"] or not values["request_id"]:
+                raise ValueError("invalid-payment")
+            if values["status"] not in {"paid", "pending", "cancelled"}:
+                raise ValueError("invalid-status")
+        except (InvalidOperation, ValueError):
+            flash("Оң сома, сыртқы сілтеме, request ID және дұрыс күй қажет.", "error")
+            return render_template("payment-form.html", membership=membership, values=values), 400
+        db.session.add(Payment(
+            membership=membership,
+            amount=amount,
+            status=values["status"],
+            external_reference=values["external_reference"],
+            request_id=values["request_id"],
+        ))
+        db.session.commit()
+        flash("Төлем күйі тіркелді.", "success")
+        return redirect(url_for("web.clients", q=membership.client.contact))
+    return render_template("payment-form.html", membership=membership, values=values)

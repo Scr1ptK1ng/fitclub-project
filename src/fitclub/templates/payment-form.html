@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Төлем тіркеу · FitClub{% endblock %}
+{% block content %}
+<h1>{{ membership.client.full_name }} — төлем тіркеу</h1>
+<form method="post" class="card">
+  <label>Сома, ₸<input name="amount" type="number" min="0.01" step="0.01" value="{{ values.amount }}" required></label>
+  <label>Күй<select name="status"><option value="paid">Төленді</option><option value="pending">Күтілуде</option><option value="cancelled">Болдырылмады</option></select></label>
+  <label>Сыртқы сілтеме<input name="external_reference" value="{{ values.external_reference }}" required></label>
+  <label>Request ID<input name="request_id" value="{{ values.request_id }}" required></label>
+  <p>Карта нөмірі, CVV және басқа карта деректері жиналмайды.</p>
+  <button type="submit">Сақтау</button>
+</form>
+{% endblock %}

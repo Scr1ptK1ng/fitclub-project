@@ -8,7 +8,7 @@ from pathlib import Path
 from werkzeug.security import generate_password_hash
 
 from fitclub import create_app
-from fitclub.models import Client, Membership, User, db
+from fitclub.models import Client, Membership, Payment, User, db
 
 
 class FitClubTestCase(unittest.TestCase):
@@ -101,6 +101,27 @@ class FitClubTestCase(unittest.TestCase):
         self.assertIn("екінші кезең жасалмады".encode(), second.data)
         with self.app.app_context():
             self.assertEqual(Membership.query.count(), 2)
+
+    def test_payment_is_positive_and_idempotent_without_card_data(self):
+        self.login()
+        with self.app.app_context():
+            person = Client(full_name="Аян Серік", contact="+77010000000")
+            membership = Membership(client=person, starts_on=date(2026, 11, 1), ends_on=date(2026, 12, 1), unlimited=True)
+            db.session.add_all([person, membership])
+            db.session.commit()
+            membership_id = membership.id
+        invalid = self.client.post(f"/memberships/{membership_id}/payments/new", data={
+            "amount": "-1", "status": "paid", "external_reference": "cash-42", "request_id": "pay-001"
+        })
+        self.assertEqual(invalid.status_code, 400)
+        payload = {"amount": "20000", "status": "paid", "external_reference": "cash-42", "request_id": "pay-001"}
+        first = self.client.post(f"/memberships/{membership_id}/payments/new", data=payload, follow_redirects=True)
+        self.assertIn("20000.00".encode(), first.data)
+        second = self.client.post(f"/memberships/{membership_id}/payments/new", data=payload, follow_redirects=True)
+        self.assertIn("қайталама төлем жасалмады".encode(), second.data)
+        with self.app.app_context():
+            self.assertEqual(Payment.query.count(), 1)
+            self.assertFalse(hasattr(Payment.query.one(), "card_number"))
 
 
 if __name__ == "__main__":

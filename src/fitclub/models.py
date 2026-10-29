@@ -36,6 +36,7 @@ class Membership(db.Model):
     remaining_visits = db.Column(db.Integer)
     request_id = db.Column(db.String(80), unique=True, index=True)
     client = db.relationship("Client", back_populates="memberships")
+    payments = db.relationship("Payment", back_populates="membership", cascade="all, delete-orphan")
 
     __table_args__ = (
         CheckConstraint("ends_on >= starts_on", name="ck_membership_date_order"),
@@ -45,3 +46,16 @@ class Membership(db.Model):
     @property
     def status(self) -> str:
         return "active" if self.ends_on >= date.today() else "expired"
+
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    membership_id = db.Column(db.Integer, db.ForeignKey("membership.id"), nullable=False, index=True)
+    amount = db.Column(db.Numeric(12, 2), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default="paid")
+    external_reference = db.Column(db.String(120), nullable=False)
+    request_id = db.Column(db.String(80), nullable=False, unique=True, index=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(UTC))
+    membership = db.relationship("Membership", back_populates="payments")
+
+    __table_args__ = (CheckConstraint("amount > 0", name="ck_payment_positive"),)
