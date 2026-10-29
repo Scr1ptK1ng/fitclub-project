@@ -4,6 +4,7 @@
 
 ## ЛЗ9 артефакттары
 
+- [GitHub Flow Board — Sprint 1](https://github.com/Scr1ptK1ng/fitclub-project/issues/33) — тірі тақта, WIP лимиттері және нақты карточкалар;
 - [workflow-policy.md](workflow-policy.md) — бағандар, WIP лимиттері, өту саясаты, DoR және DoD;
 - [sprint-1-plan.md](sprint-1-plan.md) — бірінші спринттің мақсаты және таңдалған жұмыс;
 - [retrospective-template.md](retrospective-template.md) — Sprint 1 шолуы мен ретроспективасы;
