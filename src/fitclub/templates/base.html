@@ -6,11 +6,27 @@
   <title>{% block title %}FitClub{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-  <header><strong>FitClub</strong>{% if session.user_id %}<form action="{{ url_for('web.logout') }}" method="post"><button>Шығу</button></form>{% endif %}</header>
-  <main>
-    {% for category, message in get_flashed_messages(with_categories=true) %}<p class="flash {{ category }}">{{ message }}</p>{% endfor %}
-    {% block content %}{% endblock %}
-  </main>
+<body class="{% if not session.user_id %}guest{% endif %}">
+  {% if session.user_id %}
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('web.index') }}"><span class="brand-mark">FC</span><span>FitClub<small>Operations</small></span></a>
+    <nav>
+      {% if session.role == 'admin' %}
+      <a class="{% if request.endpoint == 'web.dashboard' %}active{% endif %}" href="{{ url_for('web.dashboard') }}"><span>▦</span> Басқару панелі</a>
+      <a class="{% if request.endpoint in ['web.clients','web.client_detail','web.new_client','web.new_membership','web.extend_membership','web.new_payment'] %}active{% endif %}" href="{{ url_for('web.clients') }}"><span>◎</span> Клиенттер</a>
+      {% else %}
+      <a class="active" href="{{ url_for('web.portal') }}"><span>◎</span> Менің кабинетім</a>
+      {% endif %}
+    </nav>
+    <div class="sidebar-footer"><span class="status-dot"></span> Demo environment<form action="{{ url_for('web.logout') }}" method="post"><button class="link-button">Жүйеден шығу</button></form></div>
+  </aside>
+  {% endif %}
+  <div class="page-shell">
+    {% if session.user_id %}<header class="topbar"><div><span class="eyebrow">FITNESS CLUB MANAGEMENT</span><strong>{% block page_name %}Жұмыс кеңістігі{% endblock %}</strong></div><div class="user-chip"><span>{{ 'A' if session.role == 'admin' else 'C' }}</span><div>{{ 'Администратор' if session.role == 'admin' else 'Клиент' }}<small>{{ session.role }}</small></div></div></header>{% endif %}
+    <main>
+      {% for category, message in get_flashed_messages(with_categories=true) %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
 </body>
 </html>

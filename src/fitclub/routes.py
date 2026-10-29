@@ -5,9 +5,9 @@ from datetime import date
 from decimal import Decimal, InvalidOperation
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
-from sqlalchemy import or_
+from sqlalchemy import func, or_
 from sqlalchemy.exc import IntegrityError
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from .models import Client, Membership, Payment, User, db
 
@@ -29,7 +29,9 @@ def admin_required(view):
 
 @web.route("/")
 def index():
-    return redirect(url_for("web.clients") if session.get("user_id") else url_for("web.login"))
+    if not session.get("user_id"):
+        return redirect(url_for("web.login"))
+    return redirect(url_for("web.dashboard") if session.get("role") == "admin" else url_for("web.portal"))
 
 
 @web.route("/login", methods=["GET", "POST"])
@@ -42,9 +44,37 @@ def login():
             session.clear()
             session["user_id"] = user.id
             session["role"] = user.role
-            return redirect(url_for("web.clients"))
+            return redirect(url_for("web.dashboard") if user.role == "admin" else url_for("web.portal"))
         flash("Кіру деректері қате.", "error")
     return render_template("login.html")
+
+
+@web.route("/register", methods=["GET", "POST"])
+def register():
+    values = {
+        "full_name": request.form.get("full_name", "").strip(),
+        "contact": request.form.get("contact", "").strip(),
+    }
+    if request.method == "POST":
+        password = request.form.get("password", "")
+        confirmation = request.form.get("confirmation", "")
+        if not values["full_name"] or not values["contact"]:
+            flash("Аты-жөні мен байланыс міндетті.", "error")
+            return render_template("register.html", values=values), 400
+        if len(password) < 8 or password != confirmation:
+            flash("Құпиясөз кемінде 8 таңба болуы және қайталануы тиіс.", "error")
+            return render_template("register.html", values=values), 400
+        if User.query.filter_by(login=values["contact"]).first() or Client.query.filter_by(contact=values["contact"]).first():
+            flash("Бұл байланыс бұрын тіркелген.", "error")
+            return render_template("register.html", values=values), 409
+        db.session.add_all([
+            Client(full_name=values["full_name"], contact=values["contact"]),
+            User(login=values["contact"], password_hash=generate_password_hash(password), role="client"),
+        ])
+        db.session.commit()
+        flash("Тіркелу сәтті аяқталды. Енді жүйеге кіріңіз.", "success")
+        return redirect(url_for("web.login"))
+    return render_template("register.html", values=values)
 
 
 @web.post("/logout")
@@ -53,15 +83,54 @@ def logout():
     return redirect(url_for("web.login"))
 
 
+@web.route("/dashboard")
+@admin_required
+def dashboard():
+    today = date.today()
+    client_count = db.session.scalar(db.select(func.count(Client.id))) or 0
+    active_memberships = db.session.scalar(db.select(func.count(Membership.id)).where(Membership.ends_on >= today)) or 0
+    paid_total = db.session.scalar(db.select(func.coalesce(func.sum(Payment.amount), 0)).where(Payment.status == "paid")) or 0
+    recent_clients = Client.query.order_by(Client.created_at.desc()).limit(5).all()
+    return render_template(
+        "dashboard.html",
+        client_count=client_count,
+        active_memberships=active_memberships,
+        paid_total=paid_total,
+        pending_payments=Payment.query.filter_by(status="pending").count(),
+        recent_clients=recent_clients,
+    )
+
+
+@web.route("/portal")
+def portal():
+    if not session.get("user_id"):
+        return redirect(url_for("web.login"))
+    if session.get("role") != "client":
+        return redirect(url_for("web.dashboard"))
+    user = db.session.get(User, session["user_id"])
+    client = Client.query.filter_by(contact=user.login).first_or_404()
+    memberships = Membership.query.filter_by(client_id=client.id).order_by(Membership.ends_on.desc()).all()
+    return render_template("portal.html", client=client, memberships=memberships)
+
+
 @web.route("/clients")
 @admin_required
 def clients():
     query = request.args.get("q", "").strip()
-    items = []
+    items = Client.query.order_by(Client.created_at.desc()).all()
     if query:
         pattern = f"%{query}%"
         items = Client.query.filter(or_(Client.full_name.ilike(pattern), Client.contact.ilike(pattern))).order_by(Client.full_name).all()
     return render_template("clients.html", clients=items, query=query)
+
+
+@web.route("/clients/<int:client_id>")
+@admin_required
+def client_detail(client_id: int):
+    client = db.get_or_404(Client, client_id)
+    memberships = Membership.query.filter_by(client_id=client.id).order_by(Membership.ends_on.desc()).all()
+    payments = Payment.query.join(Membership).filter(Membership.client_id == client.id).order_by(Payment.created_at.desc()).all()
+    return render_template("client-detail.html", client=client, memberships=memberships, payments=payments)
 
 
 @web.route("/clients/new", methods=["GET", "POST"])

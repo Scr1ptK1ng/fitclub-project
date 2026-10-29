@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Кіру · FitClub{% endblock %}
 {% block content %}
-<h1>Жүйеге кіру</h1>
-<form method="post" class="card">
-  <label>Логин<input name="login" autocomplete="username" required></label>
-  <label>Құпиясөз<input name="password" type="password" autocomplete="current-password" required></label>
-  <button type="submit">Кіру</button>
-</form>
+<section class="auth-layout">
+  <div class="auth-visual"><div class="brand light"><span class="brand-mark">FC</span><span>FitClub<small>Operations</small></span></div><div><span class="eyebrow">SMART CLUB OPERATIONS</span><h1>Клубты бір<br>жүйеден басқарыңыз.</h1><p>Клиенттер, абонементтер және төлемдер — жылдам әрі түсінікті.</p></div><div class="visual-stats"><div><b>360°</b><span>клиент көрінісі</span></div><div><b>24/7</b><span>дерекке қолжетімділік</span></div></div></div>
+  <div class="auth-panel"><div class="auth-card"><span class="eyebrow">ҚОШ КЕЛДІҢІЗ</span><h2>Жүйеге кіру</h2><p class="muted">Жұмыс кеңістігіне кіру үшін деректеріңізді енгізіңіз.</p><form method="post"><label>Логин немесе байланыс<input name="login" autocomplete="username" placeholder="admin" required></label><label>Құпиясөз<input name="password" type="password" autocomplete="current-password" placeholder="••••••••" required></label><button type="submit" class="primary wide">Кіру →</button></form><p class="auth-link">Клиентсіз бе? <a href="{{ url_for('web.register') }}">Тіркелу</a></p></div></div>
+</section>
 {% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Басқару панелі · FitClub{% endblock %}
+{% block page_name %}Басқару панелі{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">TODAY'S OVERVIEW</span><h1>Қайырлы күн!</h1><p>Клубтың негізгі көрсеткіштері мен соңғы әрекеттері.</p></div><a class="primary" href="{{ url_for('web.new_client') }}">＋ Жаңа клиент</a></div>
+<section class="metric-grid">
+  <article class="metric-card"><span class="metric-icon teal">◎</span><div><span>Барлық клиент</span><strong>{{ client_count }}</strong><small>клиент базасында</small></div></article>
+  <article class="metric-card"><span class="metric-icon blue">◇</span><div><span>Белсенді абонемент</span><strong>{{ active_memberships }}</strong><small>бүгінгі күйі</small></div></article>
+  <article class="metric-card"><span class="metric-icon amber">₸</span><div><span>Төленген сома</span><strong>{{ '{:,.0f}'.format(paid_total) }}</strong><small>теңге, барлық кезең</small></div></article>
+  <article class="metric-card"><span class="metric-icon violet">↗</span><div><span>Күтудегі төлем</span><strong>{{ pending_payments }}</strong><small>назар аударуды қажет етеді</small></div></article>
+</section>
+<section class="dashboard-grid">
+  <article class="panel"><div class="panel-title"><div><span class="eyebrow">RECENT CLIENTS</span><h2>Соңғы клиенттер</h2></div><a href="{{ url_for('web.clients') }}">Барлығын көру →</a></div><div class="recent-list">{% for client in recent_clients %}<a href="{{ url_for('web.client_detail', client_id=client.id) }}"><span class="avatar">{{ client.full_name[:1] }}</span><span><b>{{ client.full_name }}</b><small>{{ client.contact }}</small></span><time>{{ client.created_at.strftime('%d.%m') }}</time></a>{% else %}<div class="empty-state"><b>Клиенттер әлі жоқ</b><span>Алғашқы клиентті тіркеңіз.</span></div>{% endfor %}</div></article>
+  <article class="panel quick-panel"><div class="panel-title"><div><span class="eyebrow">QUICK ACTIONS</span><h2>Жылдам әрекеттер</h2></div></div><a href="{{ url_for('web.new_client') }}"><span>＋</span><div><b>Клиент тіркеу</b><small>Жаңа профиль жасау</small></div>→</a><a href="{{ url_for('web.clients') }}"><span>⌕</span><div><b>Клиент табу</b><small>Абонемент пен төлемді көру</small></div>→</a></article>
+</section>
+{% endblock %}

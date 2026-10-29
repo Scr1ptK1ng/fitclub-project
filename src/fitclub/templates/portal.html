@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Жеке кабинет · FitClub{% endblock %}
+{% block page_name %}Менің кабинетім{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">MEMBER PROFILE</span><h1>{{ client.full_name }}</h1><p>{{ client.contact }} · Клиент ID #{{ '%04d'|format(client.id) }}</p></div></div>
+{% set current = memberships|first %}
+<section class="member-hero"><div><span class="eyebrow">CURRENT MEMBERSHIP</span>{% if current %}<h2>{{ 'Лимитсіз абонемент' if current.unlimited else 'Лимитті абонемент' }}</h2><p>{{ current.starts_on }} — {{ current.ends_on }}</p><span class="badge {{ current.status }}">{{ 'Белсенді' if current.status == 'active' else 'Аяқталған' }}</span>{% else %}<h2>Абонемент ашылмаған</h2><p>Клуб әкімшісіне хабарласыңыз.</p>{% endif %}</div><div class="membership-number">FITCLUB<small>MEMBER</small></div></section>
+<section class="panel"><div class="panel-title"><div><span class="eyebrow">HISTORY</span><h2>Абонемент тарихы</h2></div></div><div class="timeline">{% for item in memberships %}<div><span></span><section><b>{{ item.starts_on }} — {{ item.ends_on }}</b><p>{{ 'Лимитсіз' if item.unlimited else item.remaining_visits|string + ' келу' }} · {{ item.status }}</p>{% for payment in item.payments %}<small>Төлем: {{ payment.amount }} ₸ · {{ payment.status }}</small>{% endfor %}</section></div>{% else %}<div class="empty-state"><b>Тарих бос</b><span>Абонемент ашылғанда осында көрінеді.</span></div>{% endfor %}</div></section>
+{% endblock %}
