@@ -91,6 +91,12 @@ def dashboard():
     active_memberships = db.session.scalar(db.select(func.count(Membership.id)).where(Membership.ends_on >= today)) or 0
     paid_total = db.session.scalar(db.select(func.coalesce(func.sum(Payment.amount), 0)).where(Payment.status == "paid")) or 0
     recent_clients = Client.query.order_by(Client.created_at.desc()).limit(5).all()
+    unlimited_memberships = Membership.query.filter(Membership.ends_on >= today, Membership.unlimited.is_(True)).count()
+    limited_memberships = Membership.query.filter(Membership.ends_on >= today, Membership.unlimited.is_(False)).count()
+    membership_total = unlimited_memberships + limited_memberships
+    unlimited_percent = round(unlimited_memberships * 100 / membership_total) if membership_total else 0
+    revenue_target = 100000
+    revenue_progress = min(round(float(paid_total) * 100 / revenue_target), 100)
     return render_template(
         "dashboard.html",
         client_count=client_count,
@@ -98,6 +104,11 @@ def dashboard():
         paid_total=paid_total,
         pending_payments=Payment.query.filter_by(status="pending").count(),
         recent_clients=recent_clients,
+        unlimited_memberships=unlimited_memberships,
+        limited_memberships=limited_memberships,
+        unlimited_percent=unlimited_percent,
+        revenue_target=revenue_target,
+        revenue_progress=revenue_progress,
     )
 
 

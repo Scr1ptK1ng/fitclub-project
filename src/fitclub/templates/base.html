@@ -18,11 +18,12 @@
       <a class="active" href="{{ url_for('web.portal') }}"><span>◎</span> Менің кабинетім</a>
       {% endif %}
     </nav>
+    {% if session.role == 'admin' %}<div class="premium-badge"><span>✦</span><div><b>FitClub Premium</b><small>Басқару жүйесі</small></div></div>{% endif %}
     <div class="sidebar-footer"><span class="status-dot"></span> Demo environment<form action="{{ url_for('web.logout') }}" method="post"><button class="link-button">Жүйеден шығу</button></form></div>
   </aside>
   {% endif %}
   <div class="page-shell">
-    {% if session.user_id %}<header class="topbar"><div><span class="eyebrow">FITNESS CLUB MANAGEMENT</span><strong>{% block page_name %}Жұмыс кеңістігі{% endblock %}</strong></div><div class="user-chip"><span>{{ 'A' if session.role == 'admin' else 'C' }}</span><div>{{ 'Администратор' if session.role == 'admin' else 'Клиент' }}<small>{{ session.role }}</small></div></div></header>{% endif %}
+    {% if session.user_id %}<header class="topbar"><div><span class="eyebrow">FITNESS CLUB MANAGEMENT</span><strong>{% block page_name %}Жұмыс кеңістігі{% endblock %}</strong></div><div class="topbar-actions"><span class="live-pill"><i></i> LIVE</span><div class="user-chip"><span>{{ 'A' if session.role == 'admin' else 'C' }}</span><div>{{ 'Администратор' if session.role == 'admin' else 'Клиент' }}<small>{{ session.role }}</small></div></div></div></header>{% endif %}
     <main>
       {% for category, message in get_flashed_messages(with_categories=true) %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
       {% block content %}{% endblock %}
