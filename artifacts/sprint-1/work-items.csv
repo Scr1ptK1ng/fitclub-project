@@ -1,0 +1,6 @@
+﻿number,title,state,created_at,first_in_progress_at,closed_at,cycle_time_hours,labels,url
+12,Тапсырыс берушінің талаптарын нақтылау,closed,2026-09-17T14:19:17Z,2026-10-29T10:25:55Z,2026-10-29T10:27:21Z,0.024,class:standard;sprint:1;status:done,https://github.com/Scr1ptK1ng/fitclub-project/issues/12
+10,Тестілеудің бастапқы сценарийлерін дайындау,closed,2026-09-17T14:19:10Z,2026-10-29T10:25:53Z,2026-10-29T10:27:19Z,0.024,class:standard;sprint:1;status:done,https://github.com/Scr1ptK1ng/fitclub-project/issues/10
+4,[US-03] Клиент пен абонемент күйін табу,closed,2026-09-17T14:18:47Z,2026-10-29T10:25:51Z,2026-10-29T10:27:17Z,0.024,MVP;P1;class:standard;epic:E2;lab4;sprint:1;status:done;user-story,https://github.com/Scr1ptK1ng/fitclub-project/issues/4
+3,[US-01] Жүйеге кіру,closed,2026-09-17T14:18:43Z,2026-10-29T10:22:54Z,2026-10-29T10:27:14Z,0.072,MVP;P1;class:standard;epic:E1;lab4;sprint:1;status:done;user-story,https://github.com/Scr1ptK1ng/fitclub-project/issues/3
+2,[US-02] Клиентті тіркеу,closed,2026-09-17T14:18:40Z,2026-10-29T10:25:48Z,2026-10-29T10:27:12Z,0.023,MVP;P1;class:standard;epic:E2;lab4;sprint:1;status:done;user-story,https://github.com/Scr1ptK1ng/fitclub-project/issues/2

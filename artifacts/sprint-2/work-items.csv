@@ -1,0 +1,4 @@
+﻿number,title,state,created_at,first_in_progress_at,closed_at,cycle_time_hours,labels,url
+22,[US-06] Төлем күйін тіркеу,closed,2026-10-01T12:26:13Z,2026-10-29T10:30:12Z,2026-10-29T10:31:15Z,0.018,MVP;P1;class:standard;epic:E3;lab4;sprint:2;status:done;user-story,https://github.com/Scr1ptK1ng/fitclub-project/issues/22
+6,[US-05] Абонементті ұзарту,closed,2026-09-17T14:18:57Z,2026-10-29T10:29:18Z,2026-10-29T10:30:20Z,0.017,MVP;P1;class:standard;epic:E3;lab4;sprint:2;status:done;user-story,https://github.com/Scr1ptK1ng/fitclub-project/issues/6
+5,[US-04] Лимитті немесе лимитсіз абонемент ашу,closed,2026-09-17T14:18:51Z,2026-10-29T10:28:29Z,2026-10-29T10:29:25Z,0.016,MVP;P1;class:standard;epic:E3;lab4;sprint:2;status:done;user-story,https://github.com/Scr1ptK1ng/fitclub-project/issues/5

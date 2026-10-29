@@ -29,5 +29,5 @@
 
 `python scripts/export_flow_metrics.py --repo Scr1ptK1ng/fitclub-project --sprint "Sprint 1" --start 2026-10-29 --end 2026-11-04 --out artifacts/sprint-1`
 
-Скрипт GitHub API-ден issue, milestone және event оқиғаларын алады. Нәтиже CSV/JSON ретінде сақталады; кейін Excel/CFD сол файлдардан құрылады.
+Скрипт GitHub API-ден issue, milestone және event оқиғаларын алады. `work-items.csv` cycle time-ды, `daily-cfd.csv` күндік кесіндіні, `event-cfd.csv` әр status/close оқиғасынан кейінгі CFD күйін сақтайды. `raw-issues-events.json` — қайта тексеруге арналған бастапқы экспорт.
 

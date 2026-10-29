@@ -1,0 +1,14 @@
+{
+  "repository": "Scr1ptK1ng/fitclub-project",
+  "milestone": "Sprint 2",
+  "exported_at": "2026-10-29T10:32:10.896329+00:00",
+  "work_item_count": 3,
+  "sprint_start": "2026-10-29",
+  "sprint_end": "2026-10-29",
+  "cfd_through": "2026-10-29",
+  "throughput": 3,
+  "measured_cycle_time_count": 3,
+  "average_cycle_time_hours": 0.017,
+  "p85_cycle_time_hours": 0.018,
+  "note": "No value is imputed when a required GitHub event is absent."
+}

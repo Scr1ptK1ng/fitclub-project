@@ -124,6 +124,8 @@ def main() -> int:
         writer.writerows(rows)
 
     exported_at = datetime.now(timezone.utc)
+    start_at = datetime.combine(args.start, time.min, tzinfo=timezone.utc)
+    end_at = datetime.combine(args.end, time.max, tzinfo=timezone.utc)
     cfd_through = min(args.end, exported_at.date())
     cfd_rows = []
     day = args.start
@@ -139,8 +141,28 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(cfd_rows)
 
-    start_at = datetime.combine(args.start, time.min, tzinfo=timezone.utc)
-    end_at = datetime.combine(args.end, time.max, tzinfo=timezone.utc)
+    event_snapshots = {start_at}
+    snapshot_ceiling = min(end_at, exported_at)
+    for issue, events in tracked:
+        for event in events:
+            occurred = event_time(event)
+            label = (event.get("label") or {}).get("name")
+            if occurred and start_at <= occurred <= snapshot_ceiling and (
+                (event.get("event") in {"labeled", "unlabeled"} and label in STATUS_LABELS)
+                or event.get("event") in {"closed", "reopened"}
+            ):
+                event_snapshots.add(occurred)
+    event_cfd_rows = []
+    for snapshot in sorted(event_snapshots):
+        counts = {status: 0 for status in STATUSES}
+        for issue, events in tracked:
+            counts[status_at(issue, events, snapshot)] += 1
+        event_cfd_rows.append({"timestamp": snapshot.isoformat(), **counts})
+    with (args.out / "event-cfd.csv").open("w", newline="", encoding="utf-8-sig") as fh:
+        writer = csv.DictWriter(fh, fieldnames=["timestamp", *STATUSES])
+        writer.writeheader()
+        writer.writerows(event_cfd_rows)
+
     completed_in_window = []
     cycle_values = []
     for row in rows:
