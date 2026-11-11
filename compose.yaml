@@ -1,0 +1,37 @@
+services:
+  fitclub:
+    build: .
+    environment:
+      FITCLUB_DATABASE_URL: sqlite:////data/fitclub.db
+      FITCLUB_SECRET_KEY: ${FITCLUB_SECRET_KEY:?set FITCLUB_SECRET_KEY}
+      FITCLUB_ADMIN_LOGIN: ${FITCLUB_ADMIN_LOGIN:-admin}
+      FITCLUB_ADMIN_PASSWORD: ${FITCLUB_ADMIN_PASSWORD:?set FITCLUB_ADMIN_PASSWORD}
+    command: >-
+      sh -c "flask --app fitclub init-db && flask --app fitclub seed-demo &&
+      flask --app fitclub run --host 0.0.0.0 --port 5000"
+    ports:
+      - "5000:5000"
+    volumes:
+      - fitclub-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+    restart: unless-stopped
+    depends_on:
+      fitclub:
+        condition: service_healthy
+
+volumes:
+  fitclub-data:
+  uptime-kuma-data:

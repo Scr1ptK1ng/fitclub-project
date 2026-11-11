@@ -1,5 +1,11 @@
 __pycache__/
 *.pyc
 .venv/
+.tmp/
+.playwright-browsers/
 instance/
 *.db
+artifacts/qa/*.json
+artifacts/qa/*.xml
+artifacts/qa/*.log
+artifacts/qa/playwright-report/

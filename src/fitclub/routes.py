@@ -4,8 +4,8 @@ from functools import wraps
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
-from sqlalchemy import func, or_
+from flask import Blueprint, flash, jsonify, redirect, render_template, request, session, url_for
+from sqlalchemy import func, or_, text
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -13,6 +13,19 @@ from .models import Client, Membership, Payment, User, db
 
 
 web = Blueprint("web", __name__)
+
+
+@web.get("/health")
+def health():
+    """Return readiness only when the application can query its database."""
+    try:
+        # A transport-only SELECT 1 would still pass against an empty SQLite
+        # file. Query a required table so readiness also covers schema setup.
+        db.session.execute(text('SELECT 1 FROM "user" LIMIT 1'))
+    except Exception:
+        db.session.rollback()
+        return jsonify(status="unavailable", database="unavailable"), 503
+    return jsonify(status="ok", database="ok"), 200
 
 
 def admin_required(view):

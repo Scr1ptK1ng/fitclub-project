@@ -36,6 +36,25 @@ class FitClubTestCase(unittest.TestCase):
     def login(self, password="correct-password"):
         return self.client.post("/login", data={"login": "admin", "password": password}, follow_redirects=True)
 
+    def test_health_is_public_and_checks_database(self):
+        response = self.client.get("/health")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json(), {"status": "ok", "database": "ok"})
+
+    def test_health_rejects_database_without_schema(self):
+        empty_database = Path(self.tempdir.name) / "empty.db"
+        empty_app = create_app({
+            "TESTING": True,
+            "SECRET_KEY": "test-key",
+            "SQLALCHEMY_DATABASE_URI": f"sqlite:///{empty_database.as_posix()}",
+        })
+        response = empty_app.test_client().get("/health")
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.get_json(), {"status": "unavailable", "database": "unavailable"})
+        with empty_app.app_context():
+            db.session.remove()
+            db.engine.dispose()
+
     def test_login_success_and_wrong_password_is_generic(self):
         response = self.login("wrong")
         self.assertEqual(response.status_code, 200)
@@ -94,6 +113,8 @@ class FitClubTestCase(unittest.TestCase):
         portal = self.client.post("/login", data={"login": "zhanar@example.kz", "password": "strong-pass"}, follow_redirects=True)
         self.assertIn("Жанар Қали".encode(), portal.data)
         self.assertIn("Абонемент ашылмаған".encode(), portal.data)
+        forbidden = self.client.get("/clients")
+        self.assertEqual(forbidden.status_code, 403)
 
     def test_extend_membership_is_idempotent_and_preserves_history(self):
         self.login()
