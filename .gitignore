@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 .tmp/
 .playwright-browsers/
+.env
 instance/
 *.db
 artifacts/qa/*.json

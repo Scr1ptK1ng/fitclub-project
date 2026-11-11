@@ -33,6 +33,8 @@ set FITCLUB_ADMIN_PASSWORD=<демо-әкімші-құпиясөзі>
 docker compose up --build -d
 ```
 
-FitClub: `http://localhost:5000`, Uptime Kuma: `http://localhost:3001`. Kuma monitor URL: `http://fitclub:5000/health`.
+FitClub: `http://localhost:5000`, Uptime Kuma 2: `http://localhost:3001`. Kuma monitor URL: `http://fitclub:5000/health`.
+
+Құпия мәндерді репозиторийге қоспау үшін `.env.example` файлын `.env` ретінде көшіріп, мәндерін ауыстыруға болады.
 
 Алғашқы әкімші `FITCLUB_ADMIN_LOGIN` және `FITCLUB_ADMIN_PASSWORD` орталық айнымалыларымен жасалады. Құпиясөз репозиторийде сақталмайды.

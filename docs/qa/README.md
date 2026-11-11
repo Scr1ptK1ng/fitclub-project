@@ -5,6 +5,7 @@
 - [Тестілеу стратегиясы](test-strategy.md)
 - [UAT сценарийлері](uat-scenarios.md)
 - [UAT қабылдау хаттамасы](uat-protocol.md)
+- [UAT орындаушысына қысқа нұсқаулық](uat-instructions.md)
 - [Инцидент postmortem-ы](postmortem.md)
 - [Қалпына келтіру runbook-ы](runbook.md)
 - [k6 нақты нәтижесі](load-test-results.md)
