@@ -20,6 +20,8 @@
 | 20:46:20 +05 | логтағы `no such table: user` арқылы схема жоқтығы расталды |
 | 20:46:21 +05 | `flask --app fitclub init-db` орындалды; `/health` HTTP 200 болды |
 | 20:46:31 +05 | Playwright smoke: health, admin login, dashboard және clients — PASS |
+| 21:37–21:39 +05 | Uptime Kuma recovery retest: бастапқы `UP`, контейнер тоқтағанда `DOWN`, қайта іске қосылған соң `UP` |
+| 21:39:32 +05 | Kuma соңғы heartbeat: `200 - OK`, жауап уақыты 3 ms |
 
 ## Әсер және себептер
 
@@ -27,7 +29,7 @@
 - **Тікелей техникалық фактор:** схемаға тәуелді операция инициализациясыз орындалды.
 - **Жүйелік фактор:** дайындық тексеруі мен релиз қадамы бөлек орындалуы мүмкін.
 - **Не жақсы жұмыс істеді:** `/health` бос SQLite файлын сау деп көрсетпеді; init қадамы және browser regression сервисті тез растады.
-- **Не жақсарту керек:** алғашқы эксперимент кезінде Docker Desktop болмағандықтан Uptime Kuma дабылы тексерілмеді. Кейін Docker Desktop және Uptime Kuma 2.5.9 стенді орнатылды; monitor recovery retest әлі аяқталуы керек.
+- **Не жақсарту керек:** алғашқы эксперимент кезінде Docker Desktop болмағандықтан Uptime Kuma дабылы бірден тексерілмеді. Кейін Docker Desktop және Uptime Kuma 2.5.9 стенді орнатылып, `UP → DOWN → UP` recovery retest нақты аяқталды.
 
 Бұл құжат кінәліні іздемейді: қате жеке адамнан емес, процестің мұндай күйге рұқсат беруінен қаралады.
 
@@ -37,4 +39,5 @@
 |---|---|---|---|---|
 | DB дайындығын автоматты тексеру | Айдос | 2026-11-18 | [#34](https://github.com/Scr1ptK1ng/fitclub-project/issues/34) | Open |
 | релиз чек-листіне init/health қадамын қосу | Ануар | 2026-11-16 | [#35](https://github.com/Scr1ptK1ng/fitclub-project/issues/35) | Open |
-| `/health` мониторингі мен recovery retest | Әділбек | 2026-11-18 | [#36](https://github.com/Scr1ptK1ng/fitclub-project/issues/36) | Open |
+| `/health` мониторингі мен recovery retest | Әділбек | 2026-11-18 | [#36](https://github.com/Scr1ptK1ng/fitclub-project/issues/36) | Done, 2026-11-11 |
+
